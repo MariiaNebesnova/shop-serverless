@@ -1,0 +1,19 @@
+{
+  "name": "shop-serverless",
+  "version": "1.0.0",
+  "description": "petproject",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MariiaNebesnova/shop-serverless.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MariiaNebesnova/shop-serverless/issues"
+  },
+  "homepage": "https://github.com/MariiaNebesnova/shop-serverless#readme"
+}
