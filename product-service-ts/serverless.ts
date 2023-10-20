@@ -19,6 +19,8 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      TABLE_PRODUCTS_NAME: "${env:TABLE_PRODUCTS_NAME}",
+      TABLE_STOCKS_NAME: "${env:TABLE_STOCKS_NAME}"
     },
     iam: {
       role: {
