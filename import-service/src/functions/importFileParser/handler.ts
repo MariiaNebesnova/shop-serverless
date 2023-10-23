@@ -18,7 +18,7 @@ const importFileParser = async (event: S3Event) => {
 
     const params = {
       Bucket: bucketName,
-      Key: decodeURIComponent(record.s3.object.key.replace(/\+/g, '')),
+      Key: key,
     };
 
     s3.getObject(params).createReadStream()
