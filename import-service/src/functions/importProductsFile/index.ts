@@ -8,11 +8,13 @@ export default {
       http: {
         method: 'get',
         path: 'import',
-        // request: {
-        //   schemas: {
-        //     'application/json': schema,
-        //   },
-        // },
+        request: {
+          parameters: {
+            querystrings: {
+              name: true
+            }
+          }
+        }
       },
     },
   ],

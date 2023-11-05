@@ -21,7 +21,15 @@ const importFileParser = async (event: S3Event) => {
       Key: key,
     };
 
-    s3.getObject(params).createReadStream()
+    // await s3.copyObject({
+    //   ...params,
+    //   CopySource: `${bucketName}/${key}`
+    // }).promise();
+
+    // console.log("__OBJECT COPIED");
+
+    s3.getObject(params)
+      .createReadStream()
       .pipe(csv())
       .on('data', async (data) => {
         console.log("__READING RECORD: ", JSON.stringify(data))

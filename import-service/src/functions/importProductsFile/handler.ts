@@ -14,17 +14,20 @@ const importProductsFile : ValidatedEventAPIGatewayProxyEvent<typeof schema> = a
 
   const s3 = new AWS.S3({
     region: 'us-east-1',
+    signatureVersion: 'v4'
   });
 
   const params = {
-    Bucket: 'shop-aws-import-bucket',
+    Bucket: 'shop-react-3-files',
     Key: `uploaded/${fileName}`,
     ContentType: 'text/csv',
   };
 
   try {
-    const signedUrl = s3.getSignedUrl('putObject', params);
-    return formatJSONResponse({signedUrl});
+    console.log("__PARAMS: ", params);
+    const signedUrl = await s3.getSignedUrlPromise('putObject', params);
+    console.log("__SignedUrl: ", signedUrl);
+    return formatJSONResponse(signedUrl);
   } catch (e) {
     console.log("__ERROR: ", e);
     return formatErrorJSONResponse(e, 500);
