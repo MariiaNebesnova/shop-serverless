@@ -10,17 +10,14 @@ const dynamo = new AWS.DynamoDB.DocumentClient();
 const ProductsTable = process.env.TABLE_PRODUCTS_NAME;
 const StocksTable = process.env.TABLE_STOCKS_NAME;
 
-const productCreateValidationSchema = yup.object().shape({
+export const productCreateValidationSchema = yup.object().shape({
   title: yup.string().required(),
   price: yup.number().moreThan(0).required(),
   description: yup.string().nullable(),
   count: yup.number().integer().required(),
 });
 
-const createProduct = async (event) => {
-  console.log("__lambda event", event);
-  const { title, description, price, count } = event.body;
-
+export const createtTransactionObjects = ({ title, description, price, count }) => {
   const product = {
     id: uuidv4(),
     title,
@@ -30,7 +27,7 @@ const createProduct = async (event) => {
 
   const stock = { product_id: product.id, count };
 
-  const params: AWS.DynamoDB.DocumentClient.TransactWriteItemsInput = {
+  const transactParams: AWS.DynamoDB.DocumentClient.TransactWriteItemsInput = {
     TransactItems: [
       {
         Put: {
@@ -51,6 +48,17 @@ const createProduct = async (event) => {
     ]
   }
 
+  return {
+    product,
+    stock,
+    transactParams
+  }
+}
+
+const createProduct = async (event) => {
+  console.log("__lambda event", event);
+  const { product, transactParams } = createtTransactionObjects(event.body);
+
   try {
     try {
       await productCreateValidationSchema.validate(event.body);
@@ -58,10 +66,10 @@ const createProduct = async (event) => {
       console.error('Validation error:', validationError.errors);
       return formatErrorJSONResponse(validationError.errors);
     }
-    await dynamo.transactWrite(params).promise();
+    await dynamo.transactWrite(transactParams).promise();
     return formatJSONResponse(product);
   } catch (error) {
-    console.error('Error executing getProductsList:', error);
+    console.error('Error executing createProduct:', error);
     return formatErrorJSONResponse(error);
   }
 };
