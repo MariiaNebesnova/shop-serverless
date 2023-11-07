@@ -11,7 +11,7 @@ const importFileParser = async (event: S3Event) => {
     region: 'us-east-1',
   });
 
-  for (const record of event.Records) {
+  const record = event.Records[0];
     const key = record.s3.object.key;
 
     console.log("__OBJECT: ", key)
@@ -21,12 +21,13 @@ const importFileParser = async (event: S3Event) => {
       Key: key,
     };
 
-    // await s3.copyObject({
-    //   ...params,
-    //   CopySource: `${bucketName}/${key}`
-    // }).promise();
+    // dirty hack
+    await s3.copyObject({
+      ...params,
+      CopySource: `${bucketName}/${key}`
+    }).promise();
 
-    // console.log("__OBJECT COPIED");
+    console.log("__OBJECT COPIED");
 
     s3.getObject(params)
       .createReadStream()
@@ -55,7 +56,7 @@ const importFileParser = async (event: S3Event) => {
       .on('end', () => {
         console.log("__READING ")
       })
-  }
+  
 
 
 
