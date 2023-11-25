@@ -17,6 +17,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
+      SQS_URL: 'https://sqs.us-east-1.amazonaws.com/784294038424/catalogItemsQueue'
     },
     iamRoleStatements: [
       {
@@ -25,6 +26,11 @@ const serverlessConfiguration: AWS = {
           's3:*',
         ],
         Resource: 'arn:aws:s3:::shop-react-3-files/*',
+      },
+      {
+        Effect: 'Allow',
+        Action: ['sqs:*'],
+        Resource: 'arn:aws:sqs:us-east-1:784294038424:catalogItemsQueue',
       },
     ],
   },
